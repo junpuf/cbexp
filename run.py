@@ -5,14 +5,22 @@ import os
 
 def main():
     args = parse_args()
-    if os.path.exists(args.log_filepath):
-        os.remove(args.log_filepath)
+    logger = get_logger(args.log_filepath)
+
+    # log some stuff
+    for i in range(1000):
+        logger.warning("hello world")
+
+
+def get_logger(log_filepath):
+    if os.path.exists(log_filepath):
+        os.remove(log_filepath)
 
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
     formatter = logging.Formatter('%(message)s')
     # file logging
-    logfile_handler = logging.FileHandler(args.log_filepath)
+    logfile_handler = logging.FileHandler(log_filepath)
     logfile_handler.setFormatter(formatter)
     logger.addHandler(logfile_handler)
     # stdout logging
@@ -23,10 +31,7 @@ def main():
     stderr_handler = logging.StreamHandler(sys.stderr)
     stderr_handler.setFormatter(formatter)
     logger.addHandler(stderr_handler)
-
-    # log some stuff
-    for i in range(1000):
-        logger.warning("hello world")
+    return logger
 
 
 def parse_args():
@@ -42,6 +47,10 @@ def parse_args():
 
 if __name__ == "__main__":
     try:
+        root = os.getenv("CODEBUILD_SRC_DIR")
+        tmp_dir = os.path.join(root, ".tmp") 
+        if not os.path.exists(tmp_dir):
+            os.makedirs(tmp_dir)
         sys.exit(main())
     except KeyboardInterrupt:
         pass
