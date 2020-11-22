@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.7
+
+  pre_build:
+    commands:
+      - env | grep "CODEBUILD"
+      - $PRE_BUILD_COMMAND
+
+  build:
+    commands:
+      - $BUILD_COMMAND
+
+  post_build:
+    commands:
+      - $POST_BUILD_COMMAND
