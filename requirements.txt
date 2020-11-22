@@ -1,0 +1,6 @@
+boto3
+requests
+PyYAML
+black
+flake8
+pytz

@@ -4,11 +4,18 @@ phases:
   install:
     runtime-versions:
       python: 3.7
-
-  pre_build:
     commands:
       - env | grep "CODEBUILD"
       - env | grep "JUNPU"
+      - python3 -m pip install --upgrade pip
+      - python3 -m pip install --quiet --use-feature=2020-resolver --upgrade --upgrade-strategy only-if-needed --requirement requirements.txt
+      - python3 -m pip list
+      - eval "${JUNPU_INSTALL_COMMANDS}"
+    finally:
+      - eval "${JUNPU_INSTALL_FINALLY}"
+
+  pre_build:
+    commands:
       - eval "${JUNPU_PRE_BUILD_COMMANDS}"
     finally:
       - eval "${JUNPU_PRE_BUILD_FINALLY}"
