@@ -8,12 +8,19 @@ phases:
   pre_build:
     commands:
       - env | grep "CODEBUILD"
-      - eval "${PRE_BUILD_COMMAND}"
+      - env | grep "JUNPU"
+      - eval "${JUNPU_PRE_BUILD_COMMANDS}"
+    finally:
+      - eval "${JUNPU_PRE_BUILD_FINALLY}"
 
   build:
     commands:
-      - eval "${BUILD_COMMAND}"
+      - eval "${JUNPU_BUILD_COMMANDS}"
+    finally:
+      - eval "${JUNPU_BUILD_FINALLY}"
 
   post_build:
     commands:
-      - eval "${POST_BUILD_COMMAND}"
+      - eval "${JUNPU_POST_BUILD_COMMANDS}"
+    finally:
+      - eval "${JUNPU_POST_BUILD_FINALLY}"
