@@ -4,10 +4,10 @@ import argparse
 import os
 
 def main():
+    args = parse_args()
     if os.path.exists(args.log_filepath):
         os.remove(args.log_filepath)
 
-    args = parse_args()
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
     formatter = logging.Formatter('%(message)s')
