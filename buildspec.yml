@@ -8,12 +8,12 @@ phases:
   pre_build:
     commands:
       - env | grep "CODEBUILD"
-      - eval ${PRE_BUILD_COMMAND}
+      - eval "${PRE_BUILD_COMMAND}"
 
   build:
     commands:
-      - eval ${BUILD_COMMAND}
+      - eval "${BUILD_COMMAND}"
 
   post_build:
     commands:
-      - eval ${POST_BUILD_COMMAND}
+      - eval "${POST_BUILD_COMMAND}"
