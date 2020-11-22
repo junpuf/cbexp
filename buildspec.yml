@@ -21,22 +21,19 @@ phases:
   pre_build:
     commands:
       - eval "${JUNPU_PRE_BUILD_COMMANDS}"
-      - python3 run.py --log-filepath "${CODEBUILD_SRC_DIR}/.tmp/${CODEBUILD_LOG_PATH}.log"
     finally:
       - eval "${JUNPU_PRE_BUILD_FINALLY}"
 
   build:
     commands:
       - eval "${JUNPU_BUILD_COMMANDS}"
+      - python3 run.py --log-filepath "${CODEBUILD_SRC_DIR}/.tmp/build_${CODEBUILD_LOG_PATH}.log"
     finally:
       - eval "${JUNPU_BUILD_FINALLY}"
+      - aws s3 cp ${CODEBUILD_SRC_DIR}/.tmp/build_${CODEBUILD_LOG_PATH}.log ${JUNPU_S3_LOG_URI}
 
   post_build:
     commands:
       - eval "${JUNPU_POST_BUILD_COMMANDS}"
     finally:
       - eval "${JUNPU_POST_BUILD_FINALLY}"
-
-artifacts:
-  files:
-    - "${CODEBUILD_SRC_DIR}/.tmp/${CODEBUILD_LOG_PATH}.log"
