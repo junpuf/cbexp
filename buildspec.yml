@@ -27,10 +27,8 @@ phases:
   build:
     commands:
       - eval "${JUNPU_BUILD_COMMANDS}"
-      - python3 run.py --log-filepath "${CODEBUILD_SRC_DIR}/.tmp/build_${CODEBUILD_LOG_PATH}.log"
     finally:
       - eval "${JUNPU_BUILD_FINALLY}"
-      - aws s3 cp ${CODEBUILD_SRC_DIR}/.tmp/build_${CODEBUILD_LOG_PATH}.log ${JUNPU_S3_LOG_URI}
 
   post_build:
     commands:
