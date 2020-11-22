@@ -8,7 +8,7 @@ phases:
       - env | grep "CODEBUILD"
       - env | grep "JUNPU"
       - python3 -m pip install --upgrade pip
-      - python3 -m pip install --quiet --use-feature=2020-resolver --upgrade --upgrade-strategy only-if-needed --requirement requirements.txt
+      - python3 -m pip install --use-feature=2020-resolver --upgrade --requirement requirements.txt
       - python3 -m pip list
       - eval "${JUNPU_INSTALL_COMMANDS}"
     finally:
