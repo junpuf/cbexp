@@ -1,7 +1,0 @@
-boto3
-awscli
-requests
-PyYAML
-black
-flake8
-pytz
