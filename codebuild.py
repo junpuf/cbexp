@@ -31,7 +31,7 @@ def main():
     ]
     start_build(project_name="cbexp", source_version=source_version, env_overrides=[
         {"name": "JUNPU_BUILD_COMMANDS", "value": build_commands, "type": "PLAINTEXT"},
-        {"name": "JUNPU_BUILD_FINALLY", "value": ";".join(build_finally), "type": "PLAINTEXT"}
+        {"name": "JUNPU_BUILD_FINALLY", "value": "; ".join(build_finally), "type": "PLAINTEXT"}
     ])
 
 
