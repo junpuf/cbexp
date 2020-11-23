@@ -27,7 +27,7 @@ def main():
     build_commands = f"python3 run.py --tmp-dir {tmp_dir} --log-filename {log_filename} --build-report-filepath {build_report_filepath}"
     build_finally = [
         f"aws s3 cp {log_filepath} {s3_log_uri}",
-        f"python3 github_actions.py --commit_sha {source_version} --comment 'S3 Log URI [{s3_log_path}]({http_log_path})'"
+        f"python3 github_actions.py --commit_sha {source_version} --comment '[{s3_log_path}]({http_log_path})'"
     ]
     start_build(project_name="cbexp", source_version=source_version, env_overrides=[
         {"name": "JUNPU_BUILD_COMMANDS", "value": build_commands, "type": "PLAINTEXT"},
