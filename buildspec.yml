@@ -8,6 +8,7 @@ phases:
       - eval "${JUNPU_INSTALL_COMMANDS}"
     finally:
       - eval "${JUNPU_INSTALL_FINALLY}"
+      - env | grep "(CODEBUILD|JUNPU)"
 
   pre_build:
     commands:
@@ -17,6 +18,7 @@ phases:
 
   build:
     commands:
+
       - eval "${JUNPU_BUILD_COMMANDS}"
     finally:
       - eval "${JUNPU_BUILD_FINALLY}"
