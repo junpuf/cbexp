@@ -19,7 +19,6 @@ phases:
 
   build:
     commands:
-
       - eval "${JUNPU_BUILD_COMMANDS}"
     finally:
       - eval "${JUNPU_BUILD_FINALLY}"
