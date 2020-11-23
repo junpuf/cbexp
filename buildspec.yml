@@ -5,7 +5,8 @@ phases:
     runtime-versions:
       python: 3.7
     commands:
-      - env | grep "JUNPU"
+      - env | grep "CODEBUILD_"
+      - env | grep "JUNPU_"
       - eval "${JUNPU_INSTALL_COMMANDS}"
     finally:
       - eval "${JUNPU_INSTALL_FINALLY}"
