@@ -23,10 +23,11 @@ def main():
     build_report_filepath = f"{tmp_dir}/build_report.json"
     log_filepath = f"{tmp_dir}/{log_filename}"
     s3_log_path = f"{s3_log_uri}{log_filename}" 
+    http_log_path = f"https://cbexp.s3.amazonaws.com/logs/{log_filename}"
     build_commands = f"python3 run.py --tmp-dir {tmp_dir} --log-filename {log_filename} --build-report-filepath {build_report_filepath}"
     build_finally = [
         f"aws s3 cp {log_filepath} {s3_log_uri}",
-        f"python3 github_actions.py --commit_sha {source_version} --comment 'Log is located at `{s3_log_path}`, you can run `aws s3 cp {s3_log_path} .` to download it.'"
+        f"python3 github_actions.py --commit_sha {source_version} --comment 'S3 Log URI [{s3_log_path}]({http_log_path})'"
     ]
     start_build(project_name="cbexp", source_version=source_version, env_overrides=[
         {"name": "JUNPU_BUILD_COMMANDS", "value": build_commands, "type": "PLAINTEXT"},
