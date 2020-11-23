@@ -19,7 +19,7 @@ def main():
     if args.comment:
         pull_requests = get_pull_requests_by_commit_sha(args.commit_sha) # assume only 1 PR has this commit_sha
         pr = PullRequest(**pull_requests.json()[0])
-        create_issue_comment(pr, args.comment)
+        create_issue_comment(pr, args.comment, args.commit_sha)
 
 
 def get_pull_requests_by_commit_sha(commit_sha):
@@ -37,7 +37,7 @@ def get_pull_requests_by_commit_sha(commit_sha):
     return response
 
 
-def create_issue_comment(pr, body):
+def create_issue_comment(pr, body, commit_sha):
     """Create an issue comment using GitHub REST API v3
     Endpoint: POST /repos/:owner/:repo/issues/:issue_number/comments
     Doc: https://developer.github.com/v3/issues/comments/#create-an-issue-comment
@@ -45,8 +45,11 @@ def create_issue_comment(pr, body):
     headers = {
         "Authorization": get_github_access_token()
     }
+    commit_page_url = f"{pr.html_url}/commits/{commit_sha}"
     text = f"""
-__CI-BOT:__ {body}
+__Commit:__ [{commit_sha}]({commit_page_url})
+__Log:__ {body}
+
     """
     data = {
         "body": text
