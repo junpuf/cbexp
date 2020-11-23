@@ -46,7 +46,7 @@ def create_issue_comment(pr, body):
         "Authorization": get_github_access_token()
     }
     text = f"""
-__Commit:__ [{pr.commits_url}]({pr.commits_url})
+__Commit:__ [{pr.diff_url}]({pr.diff_url})
 __Log:__ {body}
 
     """
