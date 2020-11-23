@@ -35,3 +35,8 @@ phases:
       - eval "${JUNPU_POST_BUILD_COMMANDS}"
     finally:
       - eval "${JUNPU_POST_BUILD_FINALLY}"
+
+reports:
+  build_report:
+    files:
+      - ${CODEBUILD_SRC_DIR}/.tmp/build_report.json

@@ -2,13 +2,28 @@ import logging
 import sys
 import argparse
 import os
+import json
 
 def main():
     args = parse_args()
-    logger = get_logger(args.log_filepath)
+
+    # build report setup
+    if os.path.exists(args.build_report_filepath):
+        os.remove(args.build_report_filepath)
+    with open(args.build_report_filepath, 'w') as build_report_file:
+        s3_log_dir = os.getenv("JUNPU_S3_LOG_URI")
+        s3_log_uri = f"{s3_log_dir}/{args.log_filename}"
+        build_report_data = {
+            "s3_log_uri": f"{s3_log_uri}"
+        }
+        json.dump(build_report_data, build_report_file)
+    
+    # logger setup
+    log_filepath = os.path.join(args.tmp_dir, args.log_filename)
+    logger = get_logger(log_filepath)
 
     # log some stuff
-    for i in range(1000):
+    for i in range(100):
         logger.warning("hello world")
 
 
@@ -37,7 +52,17 @@ def get_logger(log_filepath):
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--log-filepath",
+        "--tmp-dir",
+        default=None,
+        required=True,
+    )
+    parser.add_argument(
+        "--log-filename",
+        default=None,
+        required=True,
+    )
+    parser.add_argument(
+        "--build-report-filepath",
         default=None,
         required=True,
     )
@@ -50,7 +75,7 @@ if __name__ == "__main__":
         root = os.getenv("CODEBUILD_SRC_DIR")
         tmp_dir = os.path.join(root, ".tmp") 
         if not os.path.exists(tmp_dir):
-            os.makedirs(tmp_dir)
+            os.makedirs(tmp_dir)        
         sys.exit(main())
     except KeyboardInterrupt:
         pass
