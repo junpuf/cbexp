@@ -45,8 +45,11 @@ def create_issue_comment(pr, body):
     headers = {
         "Authorization": get_github_access_token()
     }
+
     data = {
-        "body": body
+        "body": f"""
+        __CI-BOT:__ {body}
+        """
     }
     response = requests.post(pr.comments_url, headers=headers, data=json.dumps(data))
     response.raise_for_status()
