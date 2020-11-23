@@ -12,7 +12,7 @@ def main():
         os.remove(args.build_report_filepath)
     with open(args.build_report_filepath, 'w') as build_report_file:
         s3_log_dir = os.getenv("JUNPU_S3_LOG_URI")
-        s3_log_uri = f"{s3_log_dir}/{args.log_filename}"
+        s3_log_uri = f"{s3_log_dir}{args.log_filename}"
         build_report_data = {
             "s3_log_uri": f"{s3_log_uri}"
         }
