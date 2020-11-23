@@ -5,13 +5,6 @@ phases:
     runtime-versions:
       python: 3.7
     commands:
-      - env | grep "CODEBUILD"
-      - env | grep "JUNPU"
-      - aws s3 cp --recursive s3://cbexp/deps/ /tmp
-      - python3 -m pip install --quiet /tmp/pip-20.2.4.tar.gz
-      - python3 -m pip install --quiet --use-feature=2020-resolver --requirement requirements.txt
-      - python3 -m pip list
-      - python3 -m site
       - eval "${JUNPU_INSTALL_COMMANDS}"
     finally:
       - eval "${JUNPU_INSTALL_FINALLY}"
