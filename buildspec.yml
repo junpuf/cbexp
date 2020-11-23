@@ -5,10 +5,17 @@ phases:
     runtime-versions:
       python: 3.7
     commands:
+      - echo "CODEBUILD_SOURCE_REPO_URL=${CODEBUILD_SOURCE_REPO_URL}"
+      - echo "CODEBUILD_WEBHOOK_TRIGGER=${CODEBUILD_WEBHOOK_TRIGGER}"
+      - echo "CODEBUILD_WEBHOOK_EVENT=${CODEBUILD_WEBHOOK_EVENT}"
+      - echo "CODEBUILD_SRC_DIR=${CODEBUILD_SRC_DIR}"
+      - echo "CODEBUILD_BUILD_NUMBER=${CODEBUILD_BUILD_NUMBER}"
+      - echo "CODEBUILD_BUILD_ID=${CODEBUILD_BUILD_ID}"
+      - echo "CODEBUILD_LOG_PATH=${CODEBUILD_LOG_PATH}"
+      - env | grep "JUNPU"
       - eval "${JUNPU_INSTALL_COMMANDS}"
     finally:
       - eval "${JUNPU_INSTALL_FINALLY}"
-      - env | grep "(CODEBUILD|JUNPU)"
 
   pre_build:
     commands:
