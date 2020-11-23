@@ -16,13 +16,12 @@ def start_build(project_name, source_version, env_overrides):
 
 def main():
     source_version = os.getenv("CODEBUILD_RESOLVED_SOURCE_VERSION")
-    tmp_dir = os.path.join(os.getenv("CODEBUILD_SRC_DIR"), ".tmp")  
+    tmp_dir = "${CODEBUILD_SRC_DIR}/.tmp"
     codebuild_id = os.getenv("CODEBUILD_LOG_PATH")
-    source_dir = os.getenv("CODEBUILD_SRC_DIR")
-    s3_log_uri = os.getenv("JUNPU_S3_LOG_URI")
     log_filename = f"build_{codebuild_id}.log"
-    build_report_filepath = os.path.join(tmp_dir, "build_report.json")
-    log_filepath = os.path.join(tmp_dir, log_filename)
+    s3_log_uri = os.getenv("JUNPU_S3_LOG_URI")
+    build_report_filepath = f"{tmp_dir}/build_report.json"
+    log_filepath = f"{tmp_dir}/{log_filename}"
     s3_log_path = f"{s3_log_uri}{log_filename}" 
     
     build_commands = f"python3 run.py --tmp-dir {tmp_dir} --log-filename {log_filename} --build-report-filepath {build_report_filepath}"
