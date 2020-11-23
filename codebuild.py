@@ -16,11 +16,22 @@ def start_build(project_name, source_version, env_overrides):
 
 def main():
     source_version = os.getenv("CODEBUILD_RESOLVED_SOURCE_VERSION")
-    build_commands = "python3 run.py --tmp-dir \"${CODEBUILD_SRC_DIR}/.tmp\" --log-filename \"build_${CODEBUILD_LOG_PATH}.log\" --build-report-filepath \"${CODEBUILD_SRC_DIR}/.tmp/build_report.json\""
-    build_finally = "aws s3 cp ${CODEBUILD_SRC_DIR}/.tmp/build_${CODEBUILD_LOG_PATH}.log ${JUNPU_S3_LOG_URI}"    
+    tmp_dir = "${CODEBUILD_SRC_DIR}/.tmp"
+    codebuild_id = os.getenv("CODEBUILD_LOG_PATH")
+    log_filename = f"build_{codebuild_id}.log"
+    s3_log_uri = os.getenv("JUNPU_S3_LOG_URI")
+    build_report_filepath = f"{tmp_dir}/build_report.json"
+    log_filepath = f"{tmp_dir}/{log_filename}"
+    s3_log_path = f"{s3_log_uri}{log_filename}" 
+    http_log_path = f"https://cbexp.s3.amazonaws.com/logs/{log_filename}"
+    build_commands = f"python3 run.py --tmp-dir {tmp_dir} --log-filename {log_filename} --build-report-filepath {build_report_filepath}"
+    build_finally = [
+        f"aws s3 cp {log_filepath} {s3_log_uri}",
+        f"python3 github_actions.py --commit_sha {source_version} --comment 'S3 Log URI [{s3_log_path}]({http_log_path})'"
+    ]
     start_build(project_name="cbexp", source_version=source_version, env_overrides=[
         {"name": "JUNPU_BUILD_COMMANDS", "value": build_commands, "type": "PLAINTEXT"},
-        {"name": "JUNPU_BUILD_FINALLY", "value": build_finally, "type": "PLAINTEXT"}
+        {"name": "JUNPU_BUILD_FINALLY", "value": "; ".join(build_finally), "type": "PLAINTEXT"}
     ])
 
 
