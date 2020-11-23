@@ -34,5 +34,4 @@ phases:
     commands:
       - eval "${JUNPU_POST_BUILD_COMMANDS}"
     finally:
-      - cat "${CODEBUILD_SRC_DIR}/.tmp/build_report.json" | jq '.'
       - eval "${JUNPU_POST_BUILD_FINALLY}"
