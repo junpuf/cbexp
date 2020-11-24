@@ -5,8 +5,7 @@ import argparse
 import boto3
 import requests
 
-
-from data_models.github_api_v3 import PullRequest
+from github_api_v3_data_models import PullRequest
 
 
 GITHUB_API_URL = "https://api.github.com"
@@ -19,6 +18,7 @@ def main():
     if args.comment:
         pull_requests = get_pull_requests_by_commit_sha(args.commit_sha) # assume only 1 PR has this commit_sha
         pr = PullRequest(**pull_requests.json()[0])
+
         create_issue_comment(pr, args.comment, args.commit_sha)
 
 
