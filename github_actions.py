@@ -59,6 +59,28 @@ def merge_pull_request(pr, commit_sha):
     return response
 
 
+def merge_pull_request(pr, commit_sha):
+    """Merge a pull request using GitHub REST API v3
+    Endpoint: PUT /repos/:owner/:repo/pulls/:pull_number/merge
+    Doc: https://developer.github.com/v3/pulls/#merge-a-pull-request
+    """
+    request_params = {
+        "url": f"{GITHUB_API_URL}/repos/{USER}/{REPO}/pulls/{pr.number}/merge",
+        "data": json.dumps({
+            "commit_title": "auto-merge",
+            "commit_message": "auto-merge",
+            "sha": commit_sha,
+            "merge_method": "squash"
+        }),
+        "headers": {
+            "Authorization": get_github_access_token()
+        }
+    }
+    response = requests.post(**request_params)
+    response.raise_for_status()
+    return response
+
+
 def create_issue_comment(pr, body, commit_sha):
     """Create an issue comment using GitHub REST API v3
     Endpoint: POST /repos/:owner/:repo/issues/:issue_number/comments
