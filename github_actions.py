@@ -5,8 +5,7 @@ import argparse
 import boto3
 import requests
 
-
-from data_models.github_api_v3 import PullRequest
+from github_api_v3_data_models import PullRequest
 
 
 GITHUB_API_URL = "https://api.github.com"
@@ -19,6 +18,7 @@ def main():
     if args.comment:
         pull_requests = get_pull_requests_by_commit_sha(args.commit_sha) # assume only 1 PR has this commit_sha
         pr = PullRequest(**pull_requests.json()[0])
+
         create_issue_comment(pr, args.comment, args.commit_sha)
 
 
@@ -33,6 +33,28 @@ def get_pull_requests_by_commit_sha(commit_sha):
         "Authorization": get_github_access_token()
     }
     response = requests.get(url, headers=header)
+    response.raise_for_status()
+    return response
+
+
+def merge_pull_request(pr, commit_sha):
+    """Merge a pull request using GitHub REST API v3
+    Endpoint: PUT /repos/:owner/:repo/pulls/:pull_number/merge
+    Doc: https://developer.github.com/v3/pulls/#merge-a-pull-request
+    """
+    request_params = {
+        "url": f"{GITHUB_API_URL}/repos/{USER}/{REPO}/pulls/{pr.number}/merge",
+        "data": json.dumps({
+            "commit_title": "auto-merge",
+            "commit_message": "auto-merge",
+            "sha": commit_sha,
+            "merge_method": "squash"
+        }),
+        "headers": {
+            "Authorization": get_github_access_token()
+        }
+    }
+    response = requests.post(**request_params)
     response.raise_for_status()
     return response
 
