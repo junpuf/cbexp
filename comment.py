@@ -19,8 +19,7 @@ def main():
     args = parse_args()
     if args.comment:
         response = get_pull_request(pull_number)
-        pr = PullRequest(**response.json()[0])
-        print(pr)
+        pr = PullRequest(**response.json())
         create_issue_comment(pr, args.comment, commit_sha)
 
 
