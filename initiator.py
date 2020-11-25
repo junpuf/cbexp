@@ -2,7 +2,10 @@ import os
 import sys
 import boto3
 
+
 def start_build(project_name, source_version, env_overrides):
+    """Doc: https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/codebuild.html#CodeBuild.Client.start_build
+    """
     try:
         codebuild = boto3.client("codebuild")
         response = codebuild.start_build(
@@ -13,6 +16,7 @@ def start_build(project_name, source_version, env_overrides):
     except:
         raise
     return response
+
 
 def main():
     source_version = os.getenv("CODEBUILD_RESOLVED_SOURCE_VERSION")
