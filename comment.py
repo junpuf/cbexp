@@ -25,8 +25,7 @@ def main():
 
 def get_pull_request(pull_number):
     """Get a pull request by pull_number using GitHub REST API v3
-    Endpoint: get /repos/{owner}/{repo}/pulls/{pull_number}
-    Doc: https://docs.github.com/en/free-pro-team@latest/rest/reference/pulls#get-a-pull-request
+    Endpoint Doc: https://docs.github.com/en/free-pro-team@latest/rest/reference/pulls#get-a-pull-request
     """
     arguments = {
         "url": f"{GITHUB_API_URL}/repos/{USER}/{REPO}/pulls/{pull_number}",
@@ -40,32 +39,9 @@ def get_pull_request(pull_number):
     return response
 
 
-def merge_pull_request(pr, commit_sha):
-    """Merge a pull request using GitHub REST API v3
-    Endpoint: PUT /repos/:owner/:repo/pulls/:pull_number/merge
-    Doc: https://developer.github.com/v3/pulls/#merge-a-pull-request
-    """
-    request_params = {
-        "url": f"{GITHUB_API_URL}/repos/{USER}/{REPO}/pulls/{pr.number}/merge",
-        "data": json.dumps({
-            "commit_title": "auto-merge",
-            "commit_message": "auto-merge",
-            "sha": commit_sha,
-            "merge_method": "squash"
-        }),
-        "headers": {
-            "Authorization": get_github_access_token()
-        }
-    }
-    response = requests.post(**request_params)
-    response.raise_for_status()
-    return response
-
-
 def create_issue_comment(pr, body, commit_sha):
     """Create an issue comment using GitHub REST API v3
-    Endpoint: POST /repos/:owner/:repo/issues/:issue_number/comments
-    Doc: https://developer.github.com/v3/issues/comments/#create-an-issue-comment
+    Endpoint Doc: https://docs.github.com/en/free-pro-team@latest/rest/reference/issues#create-an-issue-comment
     """
     headers = {
         "Authorization": get_github_access_token()
@@ -74,7 +50,6 @@ def create_issue_comment(pr, body, commit_sha):
     text = f"""
 __Commit:__ [{commit_sha}]({commit_page_url})
 __Log:__ {body}
-
     """
     data = {
         "body": text
