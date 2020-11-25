@@ -232,9 +232,8 @@ class Team:
 
 @dataclass
 class PullRequest:
-    """PullRequest Data Model for GitHub REST API v3
-    Endpoint: get /repos/{owner}/{repo}/pulls/{pull_number}
-    Doc: https://docs.github.com/en/free-pro-team@latest/rest/reference/pulls#get-a-pull-request
+    """Github REST API V3 Data Model for below endpoint.
+    Endpoint Doc: https://docs.github.com/en/free-pro-team@latest/rest/reference/pulls#get-a-pull-request
     """
     url: str
     id: int
