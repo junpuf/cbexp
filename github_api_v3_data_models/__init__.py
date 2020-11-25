@@ -232,9 +232,8 @@ class Team:
 
 @dataclass
 class PullRequest:
-    """Response Data Model for GitHub REST API v3
-    Endpoint: GET /repos/:owner/:repo/commits/:commit_sha/pulls
-    Doc: https://developer.github.com/v3/repos/commits/#list-pull-requests-associated-with-a-commit
+    """Github REST API V3 Data Model for below endpoint.
+    Endpoint Doc: https://docs.github.com/en/free-pro-team@latest/rest/reference/pulls#get-a-pull-request
     """
     url: str
     id: int
@@ -271,6 +270,18 @@ class PullRequest:
     _links: _Links
     author_association: str
     active_lock_reason: str
+    merged: bool
+    mergeable: bool
+    rebaseable: bool
+    mergeable_state: str
+    merged_by: User
+    comments: int
+    review_comments: int
+    maintainer_can_modify: bool
+    commits: int
+    additions: int
+    deletions: int
+    changed_files: int
 
     def __post_init__(self):
         self.user = User(**self.user) if self.user else None
@@ -285,3 +296,4 @@ class PullRequest:
         self.updated_at = _to_datetime_obj(self.updated_at)
         self.closed_at = _to_datetime_obj(self.closed_at)
         self.merged_at = _to_datetime_obj(self.merged_at)
+        self.merged_by = User(**self.merged_by) if self.merged_by else None
