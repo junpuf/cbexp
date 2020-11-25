@@ -16,10 +16,27 @@ REPO = "cbexp"
 def main():
     args = parse_args()
     if args.comment:
-        pull_requests = get_pull_requests_by_commit_sha(args.commit_sha) # assume only 1 PR has this commit_sha
+        pull_requests = get_pull_request(args.pull_number) # assume only 1 PR has this commit_sha
         pr = PullRequest(**pull_requests.json()[0])
+        print(pr)
+        # create_issue_comment(pr, args.comment, args.commit_sha)
 
-        create_issue_comment(pr, args.comment, args.commit_sha)
+
+def get_pull_request(pull_number):
+    """Get a pull request by pull_number using GitHub REST API v3
+    Endpoint: get /repos/{owner}/{repo}/pulls/{pull_number}
+    Doc: https://docs.github.com/en/free-pro-team@latest/rest/reference/pulls#get-a-pull-request
+    """
+    arguments = {
+        "url": f"{GITHUB_API_URL}/repos/{USER}/{REPO}/pulls/{pull_number}",
+        "headers": {
+            "authorization": get_github_access_token(),
+            "accept": "application/vnd.github.v3+json"
+        }
+    }
+    response = requests.get(**arguments)
+    response.raise_for_status()
+    return response
 
 
 def get_pull_requests_by_commit_sha(commit_sha):
@@ -120,15 +137,13 @@ def get_secrete_value(secret_id):
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--commit_sha",
-        type=str,
-        default=None,
+        "--pull-number",
+        type=int,
         required=True,
     )
     parser.add_argument(
         "--comment",
         type=str,
-        default=None,
         required=False,
     )
     args = parser.parse_args()

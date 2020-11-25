@@ -16,6 +16,9 @@ def start_build(project_name, source_version, env_overrides):
 
 def main():
     source_version = os.getenv("CODEBUILD_RESOLVED_SOURCE_VERSION")
+    webhook_trigger = os.getenv("CODEBUILD_WEBHOOK_TRIGGER")
+    github_pull_number = webhook_trigger.replace("pr/", "")
+
     tmp_dir = "${CODEBUILD_SRC_DIR}/.tmp"
     codebuild_id = os.getenv("CODEBUILD_LOG_PATH")
     log_filename = f"build_{codebuild_id}.log"
@@ -29,6 +32,8 @@ def main():
         f"python3 github_actions.py --commit_sha {source_version} --comment '`aws s3 cp {s3_log_path} .`'"
     ]
     start_build(project_name="cbexp", source_version=source_version, env_overrides=[
+        {"name": "GITHUB_PULL_NUMBER", "value": github_pull_number, "type": "PLAINTEXT"},
+        {"name": "GITHUB_CIMMIT_SHA", "value": source_version, "type": "PLAINTEXT"},
         {"name": "JUNPU_BUILD_COMMANDS", "value": build_commands, "type": "PLAINTEXT"},
         {"name": "JUNPU_BUILD_FINALLY", "value": "; ".join(build_finally), "type": "PLAINTEXT"}
     ])
