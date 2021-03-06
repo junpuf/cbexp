@@ -17,17 +17,17 @@ phases:
     commands:
       - export PYTHONPATH=$CODEBUILD_SRC_DIR
       # this is to send status as pending when code build is started
-      - python ci/codebuild_status_to_pr.py --status "2"
+      - python3 codebuild_status_to_pr.py --status "2"
     finally:
       # CODEBUILD_BUILD_SUCCEEDING is 0 if codebuild is failing and is 1 if codebuild is successful
-      - if [[ "$CODEBUILD_BUILD_SUCCEEDING" == 0 ]]; then python ci/codebuild_status_to_pr.py --status $CODEBUILD_BUILD_SUCCEEDING; fi
+      - if [[ "$CODEBUILD_BUILD_SUCCEEDING" == 0 ]]; then python3 codebuild_status_to_pr.py --status $CODEBUILD_BUILD_SUCCEEDING; fi
 
   build:
     commands:
       - echo "Hello world"
     finally:
-      - if [[ "$CODEBUILD_BUILD_SUCCEEDING" == 0 ]]; then python ci/codebuild_status_to_pr.py --status $CODEBUILD_BUILD_SUCCEEDING; fi
+      - if [[ "$CODEBUILD_BUILD_SUCCEEDING" == 0 ]]; then python3 codebuild_status_to_pr.py --status $CODEBUILD_BUILD_SUCCEEDING; fi
   
   post_build:
     finally:
-      - python ci/codebuild_status_to_pr.py --status $CODEBUILD_BUILD_SUCCEEDING
+      - python3 codebuild_status_to_pr.py --status $CODEBUILD_BUILD_SUCCEEDING
