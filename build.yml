@@ -26,7 +26,7 @@ phases:
     commands:
       - echo "Hello world"
     finally:
-      - - if [[ "$CODEBUILD_BUILD_SUCCEEDING" == 0 ]]; then python ci/codebuild_status_to_pr.py --status $CODEBUILD_BUILD_SUCCEEDING; fi
+      - if [[ "$CODEBUILD_BUILD_SUCCEEDING" == 0 ]]; then python ci/codebuild_status_to_pr.py --status $CODEBUILD_BUILD_SUCCEEDING; fi
   
   post_build:
     finally:
