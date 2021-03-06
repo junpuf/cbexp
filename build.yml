@@ -1,0 +1,33 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.7
+    commands:
+      - env | grep "CODEBUILD_"
+      - env | grep "JUNPU_"
+      - aws s3 cp --only-show-errors --recursive s3://cbexp/deps/ /tmp
+      - python3 -m pip install --quiet /tmp/pip-20.2.4.tar.gz
+      - python3 -m pip install --quiet --requirement requirements.txt
+      - python3 -m pip list
+      - python3 -m site"
+
+  pre_build:
+    commands:
+      - export PYTHONPATH=$CODEBUILD_SRC_DIR
+      # this is to send status as pending when code build is started
+      - python ci/codebuild_status_to_pr.py --status "2"
+    finally:
+      # CODEBUILD_BUILD_SUCCEEDING is 0 if codebuild is failing and is 1 if codebuild is successful
+      - if [[ "$CODEBUILD_BUILD_SUCCEEDING" == 0 ]]; then python ci/codebuild_status_to_pr.py --status $CODEBUILD_BUILD_SUCCEEDING; fi
+
+  build:
+    commands:
+      - echo "Hello world"
+    finally:
+      - - if [[ "$CODEBUILD_BUILD_SUCCEEDING" == 0 ]]; then python ci/codebuild_status_to_pr.py --status $CODEBUILD_BUILD_SUCCEEDING; fi
+  
+  post_build:
+    finally:
+      - python ci/codebuild_status_to_pr.py --status $CODEBUILD_BUILD_SUCCEEDING

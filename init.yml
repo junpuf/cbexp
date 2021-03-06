@@ -1,0 +1,18 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.7
+    commands:
+      - env | grep "CODEBUILD_"
+      - env | grep "JUNPU_"
+      - aws s3 cp --only-show-errors --recursive s3://cbexp/deps/ /tmp
+      - python3 -m pip install --quiet /tmp/pip-20.2.4.tar.gz
+      - python3 -m pip install --quiet -r requirements.txt
+      - python3 -m pip list
+      - python3 -m site"
+
+  build:
+    commands:
+      - python3 init.py
