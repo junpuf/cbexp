@@ -10,7 +10,7 @@ phases:
       - python3 -m pip install --quiet /tmp/pip-20.2.4.tar.gz
       - python3 -m pip install --quiet -r requirements.txt
       - python3 -m pip list
-      - python3 -m site"
+      - python3 -m site
 
   build:
     commands:
