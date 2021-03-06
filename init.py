@@ -24,7 +24,7 @@ def main():
     webhook_trigger = os.getenv("CODEBUILD_WEBHOOK_TRIGGER")
     github_pull_number = webhook_trigger.replace("pr/", "")
 
-    for i in range(10):
+    for i in range(100):
         start_build(project_name="cbexp", source_version=source_version, buildspec="build.yml", env_overrides=[
             {"name": "GITHUB_PULL_NUMBER", "value": github_pull_number, "type": "PLAINTEXT"},
             {"name": "GITHUB_CIMMIT_SHA", "value": source_version, "type": "PLAINTEXT"},
